@@ -1,0 +1,115 @@
+{
+  "note": "Photographs are authentic Wikimedia Commons files. Follow the attribution and licence terms; any adapted CC BY-SA image distributed separately must use the same or a compatible licence. Verify jurisdictional terms before reuse beyond this demo. No AI-generated athlete likenesses.",
+  "assets": [
+    {
+      "name": "Chris Gayle",
+      "filename": "ChrisGayle Cropped.jpg",
+      "author": "Dannow (cropped by Kingston Jr.)",
+      "license": "Public domain",
+      "source": "https://commons.wikimedia.org/wiki/File:ChrisGayle_Cropped.jpg",
+      "description": "A cricket player portrait.",
+      "localPath": "/images/players/cricket/chris-gayle.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "Virat Kohli",
+      "filename": "Virat Kohli portrait.jpg",
+      "author": "Anand Anil",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Virat_Kohli_portrait.jpg",
+      "description": "A portrait of Indian cricketer Virat Kohli.",
+      "localPath": "/images/players/cricket/virat-kohli.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "MS Dhoni",
+      "filename": "MS Dhoni 2016.jpg",
+      "author": "Amardeep Singh",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:MS_Dhoni_2016.jpg",
+      "description": "A portrait of Indian cricketer MS Dhoni.",
+      "localPath": "/images/players/cricket/ms-dhoni.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "Ravindra Jadeja",
+      "filename": "Ravindra Jadeja in 2018.jpg",
+      "author": "SR Vlogs",
+      "license": "CC BY 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Ravindra_Jadeja_in_2018.jpg",
+      "description": "Ravindra Jadeja during an interview.",
+      "localPath": "/images/players/cricket/ravindra-jadeja.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "Dwayne Bravo",
+      "filename": "Dwayne Bravo.jpg",
+      "author": "Ashwinpradaban",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Dwayne_Bravo.jpg",
+      "description": "A portrait of cricketer Dwayne Bravo.",
+      "localPath": "/images/players/cricket/dwayne-bravo.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "Lionel Messi",
+      "filename": "Lionel-Messi-Argentina-2022-FIFA-World-Cup (cropped).jpg",
+      "author": "Hossein Zohrevand",
+      "license": "CC BY 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Lionel-Messi-Argentina-2022-FIFA-World-Cup_(cropped).jpg",
+      "description": "Lionel Messi during the 2022 FIFA World Cup.",
+      "localPath": "/images/players/football/lionel-messi.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "Cristiano Ronaldo",
+      "filename": "Cristiano Ronaldo.jpg",
+      "author": "AtilaTheHun",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Cristiano_Ronaldo.jpg",
+      "description": "Cristiano Ronaldo playing for Manchester United (2006–07).",
+      "localPath": "/images/players/football/cristiano-ronaldo.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "Sergio Ramos",
+      "filename": "Sergio Ramos 10mar2007.jpg",
+      "author": "Darz Mol",
+      "license": "CC BY-SA 2.5 ES",
+      "source": "https://commons.wikimedia.org/wiki/File:Sergio_Ramos_10mar2007.jpg",
+      "description": "Sergio Ramos in 2007.",
+      "localPath": "/images/players/football/sergio-ramos.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "India men’s national cricket team",
+      "filename": "Indian cricket team.jpg",
+      "author": "vijay chennupati",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Indian_cricket_team.jpg",
+      "description": "India men’s national cricket team players on the field.",
+      "localPath": "/images/teams/cricket/team-india.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "New Zealand men’s national cricket team",
+      "filename": "England v New Zealand 3rd Test 2026.jpg",
+      "author": "Edwin of Northumbria (Commons file page); metadata also names Alastair Stuart Laws",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:England_v_New_Zealand_3rd_Test_2026.jpg",
+      "description": "Gus Atkinson bowling to Devon Conway on day one of the third Test England v New Zealand (25 June 2026).",
+      "localPath": "/images/teams/cricket/team-new-zealand.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    },
+    {
+      "name": "Australia men’s national cricket team",
+      "filename": "1893 Australian national cricket team.jpg",
+      "author": "E. Hawkins of Brighton",
+      "license": "Public domain",
+      "source": "https://commons.wikimedia.org/wiki/File:1893_Australian_national_cricket_team.jpg",
+      "description": "Scan of the 1893 Australian national cricket team, from Famous Cricketers (1896).",
+      "localPath": "/images/teams/cricket/team-australia.jpg",
+      "modifications": "Downloaded Commons thumbnail where applicable; displayed with CSS object-fit crop."
+    }
+  ]
+}
