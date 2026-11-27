@@ -128,3 +128,12 @@ Chess:[
 {title:'Classical rating',note:'Published historical peak and dated rating snapshot',rows:[['peak','Peak classical Elo'],['standard','Classical Elo · Nov 2026'],['peakGap','Points below peak']]},
 {title:'Speed chess',note:'November 2026 snapshot; unavailable for historical players',rows:[['rapid','Rapid Elo'],['blitz','Blitz Elo']]},
 {title:'World championship',note:'Undisputed or classical world championship lineage',rows:[['worldChampion','World champion'],['firstTitle','First title year']]}]};
+
+/* User-supplied November 2026 comparison snapshot. Totals use the cited archive's
+   definitions; detailed finishing figures are transcribed from the supplied table. */
+const careerSnapshot={
+ 'Lionel Messi':{careerApps:1186,careerGoals:937,careerAssists:428,careerGA:1365,careerRate:0.79,careerPer90:0.86,careerMinGoal:104,careerNonPenalty:822,careerPenalties:115,careerFreeKicks:76,careerHattricks:62},
+ 'Cristiano Ronaldo':{careerApps:1345,careerGoals:987,careerAssists:261,careerGA:1248,careerRate:0.73,careerPer90:0.81,careerMinGoal:111,careerNonPenalty:802,careerPenalties:185,careerFreeKicks:65,careerHattricks:67}
+};
+for(const p of players.Football){if(careerSnapshot[p.name]){Object.assign(p.stats,careerSnapshot[p.name]);p.sources.push({name:'Career totals · Nov 24, 2026',url:'https://goalassistlab.com/messi-vs-ronaldo.html?lang=en'},{name:'Career comparison archive',url:'https://www.messivsronaldo.app/'});}}
+groups.Football.unshift({title:'Overall career',note:'Senior club + country · November 2026 supplied snapshot. Career totals cross-checked against G+A Lab; detailed rates and finishing figures transcribed from the supplied comparison. Assist and goal conventions vary by archive.',rows:[['careerApps','Appearances'],['careerGoals','Goals'],['careerAssists','Assists'],['careerGA','Goals + assists'],['careerRate','Goals per match'],['careerPer90','Goals per 90 minutes'],['careerMinGoal','Minutes per goal'],['careerNonPenalty','Non-penalty goals'],['careerPenalties','Penalty goals'],['careerFreeKicks','Free-kick goals'],['careerHattricks','Hat-tricks']]});
