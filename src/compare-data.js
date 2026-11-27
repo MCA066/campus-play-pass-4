@@ -42,9 +42,9 @@ cricket('Dwayne Bravo','West Indies','All-rounder',bat(164,2968,25.36,2,10,112),
 cricket('Ben Stokes','England','All-rounder',bat(114,3463,41.23,5,24,182,{strike:95.69,wickets:74,economy:6.05}),'ICC ODI snapshot, accessed Nov 2026','2019 ODI World Cup winner',{source:'https://www.icc-cricket.com/rankings/10130/ben-stokes',bowlingSource:'https://www.ipl.com/player/ben-stokes'}),
 cricket('Glenn Maxwell','Australia','All-rounder',bat(149,3990,33.81,4,23,201,{strike:126.7,wickets:77,economy:5.46}),'ODI career through 2025','2015 and 2023 ODI World Cup winner',{source:'https://www.cricbuzz.com/cricket-news/134521/world-cup-heroics-highlight-glenn-maxwells-odi-journey'}),
 cricket('Faf du Plessis','South Africa','Batter',bat(143,5507,47.47,12,35,185),'ODI career through 2019','Former South Africa captain'),
-cricket('Rohit Sharma','India','Batter',bat(288,11895,48.95,34,62,264),'ACS cached 2026 snapshot','Men’s ODI highest individual score: 264'),
+cricket('Rohit Sharma','India','Batter',bat(296,12150,48.60,35,63,264,{strike:93.27,fours:1151,sixes:383,catches:114,stumpings:0}),'ACS cached 2026 snapshot','Men’s ODI highest individual score: 264'),
 cricket('Jasprit Bumrah','India','Bowler',bat(91,111,9.25,0,0,20,{strike:64.53,wickets:151,economy:4.58}),'BCCI / ICC 2026 snapshot','2024 T20 World Cup Player of the Tournament',{source:'https://bccitv-widget.epicon.in/players/9/jasprit-bumrah?platform=international&type=men',bowlingSource:'https://www.icc-cricket.com/rankings/63755/jasprit-bumrah'}),
-cricket('Ravindra Jadeja','India','All-rounder',bat(196,5359,37.47,6,30,119),'ACS cached 2026 snapshot','2024 T20 World Cup winner',{local:'/images/players/cricket/ravindra-jadeja.jpg'}),
+cricket('Ravindra Jadeja','India','All-rounder',bat(210,2905,32.28,0,13,87,{strike:85.54,wickets:232,economy:4.89,fours:210,sixes:55,catches:80,stumpings:0}),'ACS cached 2026 snapshot','2024 T20 World Cup winner',{local:'/images/players/cricket/ravindra-jadeja.jpg'}),
 cricket('Hardik Pandya','India','All-rounder',bat(94,1904,32.83,0,11,92,{strike:110.89,wickets:91,economy:5.6}),'BCCI 2026 snapshot','2024 T20 World Cup winner',{source:'https://scores-bcci.epicon.in/international/men/players/hardik-pandya/54',bowlingSource:'https://www.sportlyradar.com/cricket/players/9647/hardik-pandya'}),
 cricket('Andre Russell','West Indies','All-rounder',bat(56,1034,27.21,0,4,92,{strike:130.22}),'ODI career through 2019','Two-time T20 World Cup winner',{source:'https://www.windiescricket.com/players/andre-russell-4400/'}),
 cricket('Jos Buttler','England','Wicketkeeper-batter',bat(202,5578,39,11,29,162),'ACS cached 2026 snapshot','2022 T20 World Cup-winning captain'),
@@ -69,3 +69,62 @@ chess('Vladimir Kramnik','Russia',2817,'Oct 2016','2000 World Chess Champion'),
 chess('Anatoly Karpov','Soviet Union / Russia',2780,'Jul 1994','World Chess Champion from 1975')
 ]};
 export const metricSets={Football:[['caps','Senior international caps'],['goals','Senior international goals'],['rate','Goals per international match'],['ballon','Ballon d’Or awards']],Cricket:[['matches','ODI matches'],['runs','ODI runs'],['avg','Batting average'],['strike','Batting strike rate'],['hundreds','Centuries'],['fifties','Fifties'],['high','Highest ODI score (runs)'],['wickets','ODI wickets'],['economy','Bowling economy']],Chess:[['peak','Peak published classical Elo'],['standard','Classical Elo · Nov 2026'],['rapid','Rapid Elo · Nov 2026'],['blitz','Blitz Elo · Nov 2026']]};
+
+const uclSources=[
+{name:'UEFA goals (competition proper)',url:'https://www.uefa.com/uefachampionsleague/news/0257-0e910cf2494a-5185150de9d4-1000--champions-league-all-time-/'},
+{name:'UEFA appearances',url:'https://www.uefa.com/uefachampionsleague/news/025a-0e9f8a3d1e40-d534e8b4a897-1000--champions-league-appearances/'},
+{name:'UEFA assists (March 2025)',url:'https://www.uefa.com/uefachampionsleague/news/0297-1d3e8b524832-5bf371ab86ce-1000--most-assists-in-the-champions-league-cristiano-ronaldo-leads-the-way/'},
+{name:'UEFA goalkeeper records',url:'https://www.uefa.com/uefachampionsleague/news/0253-0e99cb9576d8-81e0528b33a7-1000--champions-league-s-top-goalkeepers-casillas-most-appearance/'}];
+const europe={
+'Lionel Messi':{uclMatches:163,uclGoals:129,uclAssists:40,uclMinutes:13585,uclLeft:107,uclRight:18,uclHeaders:4,uclPenalties:18,uclHattricks:8,uclTitles:4},
+'Cristiano Ronaldo':{uclMatches:183,uclGoals:140,uclAssists:42,uclMinutes:15937,uclLeft:19,uclRight:96,uclHeaders:25,uclPenalties:19,uclHattricks:8,uclTitles:5},
+'Sergio Ramos':{uclMatches:142},'Neymar':{uclMatches:81,uclGoals:43,uclAssists:33},'Ángel Di María':{uclMatches:116,uclGoals:24,uclAssists:41},
+'Manuel Neuer':{uclMatches:161,cleanSheets:62,conceded:157},'Gianluigi Buffon':{uclMatches:124,cleanSheets:52,conceded:118},'Iker Casillas':{uclMatches:177,cleanSheets:57,conceded:202,uclTitles:3},'Alisson Becker':{cleanSheets:31},
+'Kylian Mbappé':{uclGoals:70},'Luka Modrić':{uclMatches:142},'Mohamed Salah':{uclGoals:50},'Karim Benzema':{uclMatches:152,uclGoals:90,uclAssists:29},'Robert Lewandowski':{uclMatches:144,uclGoals:109}};
+const rounded=(n)=>+n.toFixed(2);
+for(const p of players.Football){
+ const x=europe[p.name];if(!x)continue;Object.assign(p.stats,x);
+ if(x.uclMatches&&x.uclGoals!=null)p.stats.uclRate=rounded(x.uclGoals/x.uclMatches);
+ if(x.uclMatches&&x.uclGoals!=null&&x.uclAssists!=null){p.stats.uclGA=x.uclGoals+x.uclAssists;p.stats.uclGARate=rounded(p.stats.uclGA/x.uclMatches);}
+ if(x.uclMinutes&&x.uclGoals)p.stats.uclMinGoal=rounded(x.uclMinutes/x.uclGoals);
+ if(x.uclMatches&&x.cleanSheets!=null)p.stats.cleanRate=rounded(x.cleanSheets/x.uclMatches*100);
+ if(x.uclMatches&&x.conceded!=null)p.stats.concededRate=rounded(x.conceded/x.uclMatches);
+ p.sources.push(...uclSources);
+ if(p.name==='Lionel Messi')p.sources.push({name:'UEFA Messi detailed record',url:'https://www.uefa.com/uefachampionsleague/news/02a7-212c29181390-c681db1beaba-1000--lionel-messi-in-the-champions-league-records-stats-who-he-/'});
+ if(p.name==='Cristiano Ronaldo')p.sources.push({name:'UEFA Ronaldo detailed record',url:'https://www.uefa.com/uefachampionsleague/news/02a7-2136b8f054ea-76a61b3f9d24-1000--cristiano-ronaldo-in-the-champions-league-records-stats-wh/'});
+}
+const formats={
+'MS Dhoni':{test:[90,4876,38.08,null,null,null,null,null,null,256,38],t20:[98,1617,37.60,null,null,null,null,null,null,57,34],url:'https://www.icc-cricket.com/news/mega-induction-sees-seven-new-names-added-in-icc-hall-of-fame'},
+'Virat Kohli':{test:[123,9230,46.85,55.58,254,30,31,1027,30,121,0],t20:[125,4188,48.70,137.04,122,1,38,369,124,54,0],url:'https://www.icc-cricket.com/rankings/3993/virat-kohli'},
+'Chris Gayle':{test:[103,7214,42.19,60.27,333,15,37,1046,98,96,0],t20:[79,1899,27.93,137.51,117,2,14,158,124,20,0],url:'https://www.icc-cricket.com/rankings/1201/chris-gayle'},
+'AB de Villiers':{test:[114,8765,50.66,54.52,278,22,46,1024,64,222,5],t20:[78,1672,26.13,135.17,79,0,10,140,60,65,7],url:'https://www.icc-cricket.com/rankings/3675/ab-de-villiers'},
+'Rohit Sharma':{test:[67,4301,40.58,57.06,212,12,18,473,88,68,0],t20:[159,4231,32.05,140.89,121,5,32,383,205,65,0],url:'https://www.icc-cricket.com/rankings/3852/rohit-sharma'},
+'David Warner':{test:[112,8786,44.60,70.19,335,26,37,1036,69,91,0],t20:[110,3277,33.44,142.48,100,1,28,337,122,62,0],url:'https://www.icc-cricket.com/rankings/5380/david-warner'}
+};
+const formatKeys=['Matches','Runs','Avg','Strike','High','Hundreds','Fifties','Fours','Sixes','Catches','Stumpings'];
+for(const p of players.Cricket){
+ const f=formats[p.name];if(f){for(const prefix of ['test','t20'])f[prefix].forEach((v,i)=>{if(v!=null)p.stats[prefix+formatKeys[i]]=v});p.sources.push({name:'ICC Test / T20I career',url:f.url});}
+ if(p.stats.matches&&p.stats.runs!=null)p.stats.runsPerMatch=rounded(p.stats.runs/p.stats.matches);
+ if(p.stats.hundreds!=null&&p.stats.fifties!=null)p.stats.fiftyPlus=p.stats.hundreds+p.stats.fifties;
+ if(p.stats.matches&&p.stats.wickets!=null)p.stats.wicketsPerMatch=rounded(p.stats.wickets/p.stats.matches);
+ if(p.name==='Ravindra Jadeja')p.sources.push({name:'BCCI ODI career',url:'https://scores-bcci.epicon.in/domestic/men/players/ravindra-jadeja/46'});
+}
+const champions={'Gukesh':2024,'Mikhail Tal':1960,'Garry Kasparov':1985,'Bobby Fischer':1972,'Magnus Carlsen':2013,'Viswanathan Anand':2007,'Ding Liren':2023,'Vladimir Kramnik':2000,'Anatoly Karpov':1975};
+for(const p of players.Chess){p.stats.worldChampion=champions[p.name]?1:0;p.stats.firstTitle=champions[p.name];if(Number.isFinite(p.stats.standard)&&Number.isFinite(p.stats.peak)&&p.stats.peak>=p.stats.standard)p.stats.peakGap=p.stats.peak-p.stats.standard;p.sources.push({name:'FIDE champion history',url:'https://museum.fide.com/champions'});}
+const fmtRows=prefix=>formatKeys.map(k=>[prefix+k,({Matches:'Matches',Runs:'Runs',Avg:'Batting average',Strike:'Strike rate',High:'Highest score',Hundreds:'Centuries',Fifties:'Fifties',Fours:'Fours',Sixes:'Sixes',Catches:'Catches',Stumpings:'Stumpings'})[k]]);
+export const groups={
+Football:[
+{title:'International career',note:'Senior national-team matches',rows:[['caps','Appearances'],['goals','Goals'],['rate','Goals per match']]},
+{title:'Champions League',note:'UEFA competition proper; career snapshots from 2025–26, not all club matches',rows:[['uclMatches','Appearances'],['uclGoals','Goals'],['uclAssists','Assists'],['uclGA','Goal contributions'],['uclRate','Goals per match'],['uclGARate','Contributions per match'],['uclMinutes','Minutes played'],['uclMinGoal','Minutes per goal']]},
+{title:'Finishing breakdown',note:'Champions League goals only',rows:[['uclLeft','Left-foot goals'],['uclRight','Right-foot goals'],['uclHeaders','Headers'],['uclPenalties','Penalties scored'],['uclHattricks','Hat-tricks']]},
+{title:'Goalkeeping',note:'Champions League · full-match clean sheets',keeper:true,rows:[['cleanSheets','Clean sheets'],['cleanRate','Clean-sheet rate (%)'],['conceded','Goals conceded'],['concededRate','Goals conceded per match']]},
+{title:'Honours',note:'Individual and club awards',rows:[['ballon','Ballon d’Or awards'],['uclTitles','Champions League titles']]}],
+Cricket:[
+{title:'ODI batting',note:'One-day international career',rows:[['matches','Matches'],['runs','Runs'],['avg','Average'],['strike','Strike rate'],['runsPerMatch','Runs per match'],['hundreds','Centuries'],['fifties','Fifties'],['fiftyPlus','Scores of 50 or more'],['high','Highest score'],['fours','Fours'],['sixes','Sixes']]},
+{title:'ODI bowling & fielding',note:'Career wicket-taking and fielding',rows:[['wickets','Wickets'],['wicketsPerMatch','Wickets per match'],['economy','Economy rate'],['catches','Catches'],['stumpings','Stumpings']]},
+{title:'Test cricket',note:'ICC completed career figures where available',rows:fmtRows('test')},
+{title:'T20 internationals',note:'ICC completed career figures where available',rows:fmtRows('t20')}],
+Chess:[
+{title:'Classical rating',note:'Published historical peak and dated rating snapshot',rows:[['peak','Peak classical Elo'],['standard','Classical Elo · Nov 2026'],['peakGap','Points below peak']]},
+{title:'Speed chess',note:'November 2026 snapshot; unavailable for historical players',rows:[['rapid','Rapid Elo'],['blitz','Blitz Elo']]},
+{title:'World championship',note:'Undisputed or classical world championship lineage',rows:[['worldChampion','World champion'],['firstTitle','First title year']]}]};
