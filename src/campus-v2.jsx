@@ -43,22 +43,19 @@ export function HomeV2({browse,setSport,db,me}) {
   const reduced=useReducedMotion();
   const open=(s='All')=>{setSport(s);browse('Find Matches');};
   const casual=db.casualMatches||[];
-  return <motion.main className="cp2" key="home-v2" initial={reduced?false:{opacity:0,y:10}} animate={{opacity:1,y:0}}>
-    <section className="cp2-hero">
-      <div className="cp2-hero-copy"><span className="cp2-kicker">CAMPUSPLAY / THE STUDENT SPORTS NETWORK</span>
-      <h1>Less waiting.<br/><em>More playing.</em></h1><p>Make the most of your college break. Challenge an opponent, play on campus, or compete for the championship.</p>
-      <div className="cp2-actions"><button className="cp2-primary" onClick={()=>open()}>Find a match <ArrowRight size={19}/></button><button className="cp2-secondary" onClick={()=>browse('Tournaments')}>Explore tournaments</button></div></div>
-      <div className="cp2-hero-art" aria-hidden="true"><div className="cp2-orbit"><Zap size={104} strokeWidth={1.2}/></div><span>01 / PLAY YOUR GAME</span></div>
-    </section>
-    <div className="cp2-section-head"><div><span className="cp2-kicker">TWO WAYS TO PLAY</span><h2>What's your game today?</h2></div><span className="cp2-muted">Hi, {me.name.split(' ')[0]}</span></div>
+  return <motion.main className="cp2 cp2-dashboard" key="home-v2" initial={reduced?false:{opacity:0,y:5}} animate={{opacity:1,y:0}}>
+    <div className="cp2-section-head cp2-page-title"><div><h1>Home</h1></div><button className="cp2-primary" onClick={()=>open()}>Find a match <ArrowRight size={17}/></button></div>
     <section className="cp2-modes">
-      <motion.article whileHover={reduced?{}:{y:-4}} className="cp2-mode"><Zap size={30}/><span className="cp2-kicker">QUICK PLAY</span><h3>One match. One opponent.</h3><p>No leagues or series. Get a game going between classes.</p><button className="cp2-primary" onClick={()=>open()}>Start playing <ArrowRight size={17}/></button></motion.article>
-      <motion.article whileHover={reduced?{}:{y:-4}} className="cp2-mode cp2-compete"><Trophy size={30}/><span className="cp2-kicker">COMPETITIVE PLAY</span><h3>Earn your place at the top.</h3><p>Register for organized competitions and follow fixtures, standings and results.</p><button className="cp2-secondary" onClick={()=>browse('Tournaments')}>View competitions <ArrowRight size={17}/></button></motion.article>
+      <article className="cp2-mode"><Zap size={26}/><h2>Quick Play</h2><p>One match between two teams or players.</p><button className="cp2-primary" onClick={()=>open()}>Find or create match <ArrowRight size={17}/></button></article>
+      <article className="cp2-mode cp2-compete"><Trophy size={26}/><h2>Tournaments</h2><p>Register, manage fixtures and track results.</p><button className="cp2-secondary" onClick={()=>browse('Tournaments')}>View tournaments <ArrowRight size={17}/></button></article>
     </section>
-    <div className="cp2-section-head"><h2>Choose your sport</h2></div><section className="cp2-sports">{SPORTS.map(s=><button key={s} className="cp2-sport" onClick={()=>open(s)}><span>{ICONS[s]}</span><strong>{s}</strong><ArrowRight size={18}/></button>)}</section>
-    <div className="cp2-section-head"><h2>Quick Play activity</h2><button className="cp2-link" onClick={()=>open()}>View matches <ArrowRight size={16}/></button></div>
-    <section className="cp2-stats">{[['Open challenges',casual.filter(m=>m.status==='Open').length],['Ready to play',casual.filter(m=>m.status==='Ready').length],['Confirmed results',casual.filter(m=>m.status==='Completed').length]].map(([label,n])=><div key={label}><strong>{n}</strong><span>{label}</span></div>)}</section>
-    <section className="cp2-news-teaser"><Newspaper size={28}/><div><h2>Beyond the game</h2><p>Explore the CampusPlay newsroom and sports stories.</p></div><button className="cp2-secondary" onClick={()=>browse('News')}>Read stories <ArrowRight size={17}/></button></section>
+    <div className="cp2-section-head"><h2>Sports</h2></div><section className="cp2-sports">{SPORTS.map(s=><button key={s} className="cp2-sport" onClick={()=>open(s)}><span>{ICONS[s]}</span><strong>{s}</strong><ArrowRight size={18}/></button>)}</section>
+    <div className="cp2-section-head"><h2>Quick Play overview</h2><button className="cp2-link" onClick={()=>open()}>All matches <ArrowRight size={16}/></button></div>
+    <section className="cp2-stats">{[['Open',casual.filter(m=>m.status==='Open').length],['Accepted',casual.filter(m=>m.status==='Ready').length],['Completed',casual.filter(m=>m.status==='Completed').length]].map(([label,n])=><div key={label}><strong>{n}</strong><span>{label}</span></div>)}</section>
+    <div className="cp2-section-head"><h2>My matches</h2><button className="cp2-link" onClick={()=>open()}>View all <ArrowRight size={16}/></button></div>
+    <section className="cp2-match-grid">{casual.filter(m=>[m.hostId,m.opponentId].includes(me.id)).slice(0,4).map(m=><article className="cp2-card" key={m.id}><div className="cp2-match-meta"><span>{ICONS[m.sport]} {m.sport}</span><span>{m.status}</span></div><div className="cp2-versus"><strong>{m.home}</strong><small>VS</small><strong>{m.away||'Open spot'}</strong></div><div className="cp2-detail"><Clock3 size={15}/>{dateLabel(m.when)}</div>{m.result&&<p className="cp2-result">{outcome(m)} · {score(m,'home')} – {score(m,'away')}</p>}</article>)}</section>
+    {!casual.some(m=>[m.hostId,m.opponentId].includes(me.id))&&<div className="cp2-card"><p>No matches yet.</p></div>}
+    <div className="cp2-section-head"><h2>News</h2><button className="cp2-link" onClick={()=>browse('News')}>View news <ArrowRight size={16}/></button></div>
   </motion.main>;
 }
 
@@ -95,8 +92,8 @@ export function QuickPlay({me,matches,update,sport,setSport,browse,say}) {
   }
   const visible=matches.filter(m=>(sport==='All'||m.sport===sport)&&(!mine||participant(m)));
   return <motion.main key="quick-v2" className="cp2" initial={reduced?false:{opacity:0,y:8}} animate={{opacity:1,y:0}}>
-    <div className="cp2-section-head cp2-page-title"><div><span className="cp2-kicker">CASUAL MATCHMAKING</span><h1>Quick Play.</h1><p>Two sides. One game. No tournament required.</p></div><button className="cp2-primary" disabled={guest} onClick={()=>{setCreating(v=>!v);setError('');setDraft(defaults(SPORTS.includes(sport)?sport:'Cricket'));}}><Plus size={20}/>{creating?'Close':'Create challenge'}</button></div>
-    <p className="cp2-demo"><ShieldCheck size={16}/> Demo profiles and matches are stored on this browser only. Switch profile to test both sides.</p>
+    <div className="cp2-section-head cp2-page-title"><div><h1>Quick Play</h1></div><button className="cp2-primary" disabled={guest} onClick={()=>{setCreating(v=>!v);setError('');setDraft(defaults(SPORTS.includes(sport)?sport:'Cricket'));}}><Plus size={20}/>{creating?'Close':'Create challenge'}</button></div>
+    <p className="cp2-demo"><ShieldCheck size={16}/> Demo mode · Data stored on this browser.</p>
     {guest&&<p>Choose a demo player in the header to participate.</p>}
     {creating&&!guest&&<form className="cp2-form cp2-card" onSubmit={create}>
       <h2>Create a match</h2><div className="cp2-fields">
@@ -110,7 +107,7 @@ export function QuickPlay({me,matches,update,sport,setSport,browse,say}) {
     </form>}
     <div className="cp2-filter"><div className="cp2-tabs" role="group" aria-label="Filter by sport">{['All',...SPORTS].map(s=><button key={s} aria-pressed={sport===s} className={sport===s?'selected':''} onClick={()=>setSport(s)}>{s}</button>)}</div><label className="cp2-check"><input type="checkbox" checked={mine} onChange={e=>setMine(e.target.checked)}/> My matches</label></div>
     {error&&<p className="cp2-error" role="alert">{error}</p>}
-    {visible.length===0&&<div className="cp2-card cp2-empty"><Zap size={30}/><h2>No matches yet</h2><p>Start a challenge or change your filters.</p>{!guest&&<button className="cp2-primary" onClick={()=>setCreating(true)}>Create a match</button>}</div>}
+    {visible.length===0&&<div className="cp2-card cp2-empty"><Zap size={30}/><h2>No matches yet</h2><p>Create a challenge or change filters.</p>{!guest&&<button className="cp2-primary" onClick={()=>setCreating(true)}>Create a match</button>}</div>}
     <section className="cp2-match-grid">{visible.map(m=><motion.article layout={!reduced} className="cp2-card" key={m.id}>
       <div className="cp2-match-meta"><span>{ICONS[m.sport]} {m.sport}</span><span className="cp2-status">{m.status}</span></div>
       <div className="cp2-versus"><div><strong>{m.home}</strong>{m.result&&<b>{score(m,'home')}</b>}</div><small>VS</small><div><strong>{m.away||'Open spot'}</strong>{m.result&&<b>{score(m,'away')}</b>}</div></div>
@@ -125,6 +122,6 @@ export function QuickPlay({me,matches,update,sport,setSport,browse,say}) {
       {m.status==='Awaiting confirmation'&&participant(m)&&(m.submittedBy===me.id?<p>Waiting for your opponent.</p>:<><button className="cp2-primary" onClick={()=>confirm(m,true)}>Confirm result</button><button className="cp2-secondary" onClick={()=>confirm(m,false)}>Request correction</button></>)}
       </div>
     </motion.article>)}</section>
-    <div className="cp2-footer"><button className="cp2-link" onClick={()=>browse('Legacy Matches')}>Previous pickup matches</button><button className="cp2-link" onClick={()=>browse('Tournaments')}>Looking for a tournament? <ArrowRight size={15}/></button></div>
+    <div className="cp2-footer"><button className="cp2-link" onClick={()=>browse('Legacy Matches')}>Pickup matches</button><button className="cp2-link" onClick={()=>browse('Tournaments')}>Tournaments <ArrowRight size={15}/></button></div>
   </motion.main>;
 }
