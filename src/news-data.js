@@ -45,7 +45,8 @@ export const sampleArticles = [
  story('sergio-ramos','Football','Sergio Ramos: the defender’s role','A basic introduction to the defender position, paired with a photo identified as Sergio Ramos in 2007.','/images/players/football/sergio-ramos.jpg','Sergio Ramos in 2007.',[
   'Sergio Ramos is a Spanish professional footballer who plays as a defender. Defenders work to protect their side’s goal and disrupt opposing attacks.',
   'This sample explains a playing position and does not make a claim about a current club or fixture.'
- ])
+ ]),
+ {id:'chess-rapid-basics',sport:'Chess',category:'Guide',title:'Rapid chess: match format and scoring',summary:'How time controls, wins and draws work in a campus chess competition.',author:'CampusPlay Editorial · Sample',publishedAt:'2026-10-14',image:"https://images.unsplash.com/photo-1677816156435-e844da620fa9?auto=format&fit=crop&w=1000&q=82",imageAlt:'Wooden chessboard photographed by Annie Spratt',readTime:'2 min read',content:['Rapid chess gives each player a limited amount of time to complete their moves. Agree on the time control before starting the match.','Tournament games usually award one point for a win, half a point for a draw, and zero points for a loss. Organizers should publish tie-break rules before the event.',sampleNotice]}
 ];
 
 export function getArticleById(id) { return sampleArticles.find(article => article.id === id) || null; }

@@ -1,20 +1,35 @@
 import React, { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Clock3, MapPin, Trophy, Zap, Plus, ShieldCheck, Newspaper } from 'lucide-react';
+import { ArrowRight, Clock3, MapPin, Trophy, Zap, Plus, ShieldCheck, Newspaper, Medal, CalendarDays, Users, Activity, ArrowUpRight } from 'lucide-react';
 import { publicAsset } from './assets.js';
 import { sampleArticles } from './news-data.js';
 import './campus-v2.css';
 
 const SPORTS = ['Cricket', 'Football', 'Chess'];
-const PHOTOS = {Cricket:'/images/teams/cricket/team-india.jpg',Football:'/images/players/football/lionel-messi.jpg'};
+const PHOTOS = {"Cricket":"https://images.unsplash.com/photo-1759733841123-b8e1d75ee45c?auto=format&fit=crop&w=1000&q=82","Football":"https://images.unsplash.com/photo-1770937331389-e0c0549aff5d?auto=format&fit=crop&w=1000&q=82","Chess":"https://images.unsplash.com/photo-1677816156435-e844da620fa9?auto=format&fit=crop&w=1000&q=82"};
+const LOCAL_FALLBACK = {Cricket:'/images/teams/cricket/team-india.jpg',Football:'/images/players/football/lionel-messi.jpg'};
+const SPORT_PATHS = {"Cricket":["M11.105 18.79l-1 .992a4.159 4.159 0 0 1 -6.038 -5.715l.157 -.166l8.282 -8.401l1.5 1.5l3.45 -3.391a2.08 2.08 0 0 1 3.057 2.815l-.116 .126l-3.391 3.45l1.5 1.5l-3.668 3.617","M10.5 7.5l6 6","M11 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"],"Football":["M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0","M12 7l4.76 3.45l-1.76 5.55h-6l-1.76 -5.55l4.76 -3.45","M12 7v-4m3 13l2.5 3m-.74 -8.55l3.74 -1.45m-11.44 7.05l-2.56 2.95m.74 -8.55l-3.74 -1.45"],"Chess":["M8 16l-1.447 .724a1 1 0 0 0 -.553 .894v2.382h12v-2.382a1 1 0 0 0 -.553 -.894l-1.447 -.724h-8","M9 3l1 3l-3.491 2.148a1 1 0 0 0 .524 1.852h2.967l-2.073 6h7.961l.112 -5c0 -3 -1.09 -5.983 -4 -7c-1.94 -.678 -2.94 -1.011 -3 -1"]};
+// Sport icons from Tabler Icons (MIT); see public/images/SPORT-CREDITS.md.
 function SportIcon({sport}) {
-  return <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    {sport==='Cricket'?<><path d="M11 39 29 21 34 26 16 44Z" fill="currentColor" fillOpacity=".18"/><path d="m29 21 8-12 4 4-7 13"/><circle cx="12" cy="12" r="7"/><path d="m8 7 8 10"/></>:sport==='Football'?<><circle cx="24" cy="24" r="19"/><path d="m24 15 9 7-4 10H19l-4-10 9-7ZM24 5v10M43 20l-10 2M36 38l-7-6M12 38l7-6M5 20l10 2"/></>:<><path d="M14 36h23l4 7H9l5-7ZM17 36c0-8 4-12 11-18l-11 5-6-5L23 5l5 6 7 2c5 7 5 15-2 23"/><circle cx="25" cy="15" r="1" fill="currentColor"/></>}
-  </svg>;
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{(SPORT_PATHS[sport]||[]).map(path=><path key={path} d={path}/>)}</svg>;
 }
 function SportPhoto({sport}) {
-  const [failed,setFailed]=useState(false);
-  return PHOTOS[sport]&&!failed?<img className="cp2-sport-photo" src={publicAsset(PHOTOS[sport])} alt="" loading="lazy" onError={()=>setFailed(true)}/>:<div className="cp2-sport-illustration" aria-hidden="true"><SportIcon sport={sport}/></div>;
+  const [attempt,setAttempt]=useState(0);
+  const url=attempt===0?PHOTOS[sport]:attempt===1&&LOCAL_FALLBACK[sport]?publicAsset(LOCAL_FALLBACK[sport]):null;
+  return url?<img className="cp2-sport-photo" src={url} alt="" loading="lazy" onError={()=>setAttempt(n=>n+1)}/>:<div className="cp2-sport-illustration" aria-hidden="true"><SportIcon sport={sport}/></div>;
+}
+function rankPlayers(matches,users) {
+  const map=new Map();
+  for(const m of matches) {
+    if(m.status!=='Completed'||!m.result)continue;
+    for(const side of ['home','away']){
+      const id=side==='home'?m.hostId:m.opponentId;if(!id)continue;
+      const p=map.get(id)||{id,name:users.find(u=>u.id===id)?.name||m[side],played:0,wins:0,draws:0};
+      p.played++;if(m.result.winner===side)p.wins++;else if(m.result.winner==='draw')p.draws++;
+      map.set(id,p);
+    }
+  }
+  return [...map.values()].sort((a,b)=>b.wins-a.wins||b.draws-a.draws||a.played-b.played||a.name.localeCompare(b.name));
 }
 const defaults = sport => ({sport,team:'',venue:'',when:'',size:sport==='Chess'?1:5,length:sport==='Cricket'?5:30});
 const emptyScore = {home:'',away:'',homeWickets:'',awayWickets:'',chess:'draw'};
@@ -50,23 +65,30 @@ function format(m) {
   return m.sport==='Cricket'?m.size+' v '+m.size+' · '+m.length+' overs':m.sport==='Football'?m.size+' v '+m.size+' · '+m.length+' min':'1 v 1 · '+m.length+' min per player';
 }
 function dateLabel(s) {const d=new Date(s);return s&&!Number.isNaN(d.getTime())?d.toLocaleString([],{dateStyle:'medium',timeStyle:'short'}):'Flexible time';}
-export function HomeV2({browse,setSport,db,me}) {
+export function HomeV2({browse,setSport,db,me,openArticle}) {
   const reduced=useReducedMotion();
   const open=(s='All')=>{setSport(s);browse('Find Matches');};
   const casual=db.casualMatches||[];
+  const [rankSport,setRankSport]=useState('All');
+  const ranked=rankPlayers(casual.filter(m=>rankSport==='All'||m.sport===rankSport),db.users||[]).slice(0,5);
+  const events=(db.tournaments||[]).filter(t=>t.status!=='completed').sort((a,b)=>String(a.startDate).localeCompare(String(b.startDate))).slice(0,3);
+  const upcoming=casual.filter(m=>['Open','Ready'].includes(m.status)&&new Date(m.when).getTime()>=Date.now()).sort((a,b)=>new Date(a.when)-new Date(b.when)).slice(0,3);
   return <motion.main className="cp2 cp2-dashboard" key="home-v2" initial={reduced?false:{opacity:0,y:5}} animate={{opacity:1,y:0}}>
-    <div className="cp2-section-head cp2-page-title"><div><h1>Home</h1></div><button className="cp2-primary" onClick={()=>open()}>Find a match <ArrowRight size={17}/></button></div>
+    <div className="cp2-section-head cp2-page-title"><div><h1>Home</h1><p className="cp2-welcome">Welcome, {me.name.split(" ")[0]}</p></div><button className="cp2-primary" onClick={()=>open()}>Find a match <ArrowRight size={18}/></button></div>
     <section className="cp2-modes">
-      <article className="cp2-mode"><Zap size={26}/><h2>Quick Play</h2><p>One match between two teams or players.</p><button className="cp2-primary" onClick={()=>open()}>Find or create match <ArrowRight size={17}/></button></article>
-      <article className="cp2-mode cp2-compete"><Trophy size={26}/><h2>Tournaments</h2><p>Register, manage fixtures and track results.</p><button className="cp2-secondary" onClick={()=>browse('Tournaments')}>View tournaments <ArrowRight size={17}/></button></article>
+      <article className="cp2-mode"><div className="cp2-mode-icon"><Zap size={29}/></div><h2>Quick Play</h2><p>One match between two teams or players.</p><button className="cp2-primary" onClick={()=>open()}>Find or create match <ArrowRight size={17}/></button></article>
+      <article className="cp2-mode cp2-compete"><div className="cp2-mode-icon"><Trophy size={29}/></div><h2>Tournaments</h2><p>Register, manage fixtures and track results.</p><button className="cp2-gold-button" onClick={()=>browse('Tournaments')}>View tournaments <ArrowRight size={17}/></button></article>
     </section>
-    <div className="cp2-section-head"><h2>Sports</h2></div><section className="cp2-sports">{SPORTS.map(s=><button key={s} className="cp2-sport" onClick={()=>open(s)}><SportPhoto sport={s}/><span className="cp2-sport-icon"><SportIcon sport={s}/></span><strong>{s}</strong><ArrowRight size={18}/></button>)}</section><p className="cp2-photo-credits">Editorial photos · <a href={publicAsset('/images/ATTRIBUTION.md')} target="_blank" rel="noreferrer">Image credits</a></p>
+    <div className="cp2-section-head"><h2>Sports</h2></div><section className="cp2-sports">{SPORTS.map(s=><button key={s} className="cp2-sport" onClick={()=>open(s)}><SportPhoto sport={s}/><span className="cp2-sport-icon"><SportIcon sport={s}/></span><strong>{s}</strong><ArrowRight size={18}/></button>)}</section><p className="cp2-photo-credits">Editorial photos · <a href={publicAsset('/images/SPORT-CREDITS.md')} target="_blank" rel="noreferrer">Image credits</a></p>
     <div className="cp2-section-head"><h2>Quick Play overview</h2><button className="cp2-link" onClick={()=>open()}>All matches <ArrowRight size={16}/></button></div>
     <section className="cp2-stats">{[['Open',casual.filter(m=>m.status==='Open').length],['Accepted',casual.filter(m=>m.status==='Ready').length],['Completed',casual.filter(m=>m.status==='Completed').length]].map(([label,n])=><div key={label}><strong>{n}</strong><span>{label}</span></div>)}</section>
+    <div className="cp2-section-head"><h2>Matches & competitions</h2></div>
+    <section className="cp2-content-grid"><article className="cp2-card cp2-list-card"><div className="cp2-list-heading"><h3><CalendarDays size={21}/> Upcoming Quick Play</h3><button className="cp2-link" onClick={()=>open()}>View all <ArrowRight size={15}/></button></div>{upcoming.length?upcoming.map(m=><button className="cp2-list-row" key={m.id} onClick={()=>open(m.sport)}><span className="cp2-list-icon"><SportIcon sport={m.sport}/></span><span><strong>{m.home} vs {m.away||"Open spot"}</strong><small>{m.venue} · {dateLabel(m.when)}</small></span><ArrowRight size={17}/></button>):<p className="cp2-empty-line">No upcoming challenges.</p>}</article><article className="cp2-card cp2-list-card"><div className="cp2-list-heading"><h3><Trophy size={21}/> Tournaments</h3><button className="cp2-link" onClick={()=>browse("Tournaments")}>View all <ArrowRight size={15}/></button></div>{events.length?events.map(t=><button className="cp2-list-row" key={t.id} onClick={()=>browse("Tournaments")}><span className="cp2-list-icon cp2-gold-icon"><SportIcon sport={t.sport}/></span><span><strong>{t.name}</strong><small>{t.sport} · {t.status.replaceAll("-"," ")}</small></span><ArrowRight size={17}/></button>):<p className="cp2-empty-line">No active tournaments.</p>}</article></section>
+    <div className="cp2-section-head"><h2>Quick Play leaderboard</h2><div className="cp2-tabs" role="group" aria-label="Leaderboard sport">{["All",...SPORTS].map(s=><button key={s} className={rankSport===s?"selected":""} aria-pressed={rankSport===s} onClick={()=>setRankSport(s)}>{s}</button>)}</div></div><section className="cp2-card cp2-leaderboard">{ranked.length?<table><thead><tr><th>Rank</th><th>Captain / Player</th><th>Played</th><th>Wins</th><th>Draws</th></tr></thead><tbody>{ranked.map((p,i)=><tr key={p.id}><td>{i===0?<Medal size={21} className="cp2-gold-icon"/>:i+1}</td><td>{p.name}</td><td>{p.played}</td><td>{p.wins}</td><td>{p.draws}</td></tr>)}</tbody></table>:<div className="cp2-rank-empty"><Medal size={30}/><p>Confirmed match results will appear here.</p></div>}</section>
     <div className="cp2-section-head"><h2>My matches</h2><button className="cp2-link" onClick={()=>open()}>View all <ArrowRight size={16}/></button></div>
     <section className="cp2-match-grid">{casual.filter(m=>[m.hostId,m.opponentId].includes(me.id)).slice(0,4).map(m=><article className="cp2-card" key={m.id}><div className="cp2-match-meta"><span className="cp2-sport-label"><SportIcon sport={m.sport}/>{m.sport}</span><span>{m.status}</span></div><div className="cp2-versus"><strong>{m.home}</strong><small>VS</small><strong>{m.away||'Open spot'}</strong></div><div className="cp2-detail"><Clock3 size={15}/>{dateLabel(m.when)}</div>{m.result&&<p className="cp2-result">{outcome(m)} · {score(m,'home')} – {score(m,'away')}</p>}</article>)}</section>
     {!casual.some(m=>[m.hostId,m.opponentId].includes(me.id))&&<div className="cp2-card"><p>No matches yet.</p></div>}
-    <div className="cp2-section-head"><h2>News</h2><button className="cp2-link" onClick={()=>browse('News')}>View news <ArrowRight size={16}/></button></div><section className="cp2-news-grid">{[sampleArticles.find(a=>a.sport==='Cricket'),sampleArticles.find(a=>a.sport==='Football'),sampleArticles.find(a=>a.sport==='Chess')||sampleArticles[1]].filter(Boolean).map(a=><button key={a.id} className="cp2-news-card" onClick={()=>browse('News')}><img src={publicAsset(a.image)} alt={a.imageAlt} loading="lazy"/><span className="cp2-news-card-copy"><small>{a.sport} · Sample article</small><strong>{a.title}</strong></span></button>)}</section>
+    <div className="cp2-section-head"><h2>News</h2><button className="cp2-link" onClick={()=>browse('News')}>View news <ArrowRight size={16}/></button></div><section className="cp2-news-grid">{[sampleArticles.find(a=>a.sport==='Cricket'),sampleArticles.find(a=>a.sport==='Football'),sampleArticles.find(a=>a.sport==='Chess')].filter(Boolean).map(a=><button key={a.id} className="cp2-news-card" onClick={()=>openArticle(a.id)}><img src={publicAsset(a.image)} alt={a.imageAlt} loading="lazy"/><span className="cp2-news-card-copy"><small>{a.sport} · Sample article</small><strong>{a.title}</strong></span></button>)}</section>
   </motion.main>;
 }
 
