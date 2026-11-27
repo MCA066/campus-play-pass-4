@@ -14,18 +14,22 @@ const api=(base,params)=>base+'?'+new URLSearchParams({...params,format:'json',o
 function strip(s){return String(s||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&quot;/g,'"').trim();}
 async function portrait(name){
  if(cache.has(name))return cache.get(name);
- const p=fetch(api('https://en.wikipedia.org/w/api.php',{action:'query',prop:'pageimages',titles:name,redirects:'1',pithumbsize:'900',pilicense:'free'})).then(r=>{if(!r.ok)throw Error('Image unavailable');return r.json()}).then(async json=>{
+ const p=fetch(api('https://en.wikipedia.org/w/api.php',{action:'query',prop:'pageimages',titles:name,redirects:'1',pithumbsize:'1000',pilicense:'free'})).then(r=>{if(!r.ok)throw Error('Image unavailable');return r.json()}).then(async json=>{
  const page=Object.values(json.query?.pages||{})[0];if(!page?.pageimage)return null;
  const file='File:'+page.pageimage;
- const info=await fetch(api('https://commons.wikimedia.org/w/api.php',{action:'query',prop:'imageinfo',titles:file,iiprop:'url|extmetadata',iiurlwidth:'900'})).then(r=>r.json());
+ const info=await fetch(api('https://commons.wikimedia.org/w/api.php',{action:'query',prop:'imageinfo',titles:file,iiprop:'url|extmetadata',iiurlwidth:'1000'})).then(r=>r.json());
  const image=Object.values(info.query?.pages||{})[0]?.imageinfo?.[0];const meta=image?.extmetadata;
  if(!image?.thumburl||!meta?.LicenseShortName?.value||!meta?.Artist?.value)return null;
  return {url:image.thumburl,credit:strip(meta.Artist.value),license:strip(meta.LicenseShortName.value),source:image.descriptionurl,licenseURL:meta.LicenseUrl?.value};
- }).catch(()=>null);cache.set(name,p);return p;
+ }).catch(()=>null);cache.set(name,p);p.then(result=>{if(!result&&cache.get(name)===p)cache.delete(name)});return p;
 }
-function PlayerImage({p}){const [image,setImage]=useState(null),[failed,setFailed]=useState(false),[loading,setLoading]=useState(!p.local);
- useEffect(()=>{let alive=true;if(p.local){setImage({url:publicAsset(p.local),source:publicAsset('/images/ATTRIBUTION.md'),credit:'Repository image credits'});setLoading(false);}else{portrait(p.wiki).then(i=>{if(alive){setImage(i);setLoading(false)}})}return()=>{alive=false}},[p]);
- return <><div className="cmp-photo">{image&&!failed?<img src={image.url} alt={p.name} onError={()=>setFailed(true)}/>:<div className="cmp-fallback"><UserRound size={48}/><span>{loading?'Loading portrait':'Portrait unavailable'}</span></div>}</div>{image&&!failed&&<div className="cmp-credit"><a href={image.source||wikiURL(p.wiki)} target="_blank" rel="noreferrer">{image.credit||'Image source'}</a>{image.license&&<> · {image.licenseURL?<a href={image.licenseURL} target="_blank" rel="noreferrer">{image.license}</a>:image.license}</>} · cropped</div>}</>;
+function PlayerImage({p}){
+ const local=p.local?{url:publicAsset(p.local),source:publicAsset('/images/ATTRIBUTION.md'),credit:'Repository image credits'}:null;
+ const [image,setImage]=useState(local),[failed,setFailed]=useState(false),[loading,setLoading]=useState(!local),[retryRemote,setRetryRemote]=useState(false);
+ useEffect(()=>{let alive=true;if(!local||retryRemote){setLoading(true);portrait(p.wiki).then(i=>{if(alive){setImage(i);setFailed(false);setLoading(false)}})}return()=>{alive=false}},[p.name,retryRemote]);
+ const fail=()=>{if(local&&!retryRemote){setImage(null);setRetryRemote(true);setLoading(true)}else{setFailed(true);setLoading(false)}};
+ const ready=image&&!failed;
+ return <><div className="cmp-photo cp-portrait-frame" aria-busy={loading}>{ready?<img src={image.url} alt={p.name} decoding="async" onError={fail}/>:<div className="cmp-fallback"><UserRound size={42}/><strong>{p.name.split(' ').map(n=>n[0]).slice(0,3).join('')}</strong><span>{loading?'Loading portrait':'Portrait unavailable'}</span></div>}</div><div className="cmp-credit">{ready?<><a href={image.source||wikiURL(p.wiki)} target="_blank" rel="noreferrer" title={image.credit||'Image source'}>{image.credit||"Photo credit"}</a>{image.license&&<> · {image.licenseURL?<a href={image.licenseURL} target="_blank" rel="noreferrer">{image.license}</a>:image.license}</>}</>:<a href={wikiURL(p.wiki)} target="_blank" rel="noreferrer">Player profile</a>}</div></>;
 }
 function PlayerCard({p,side,options,onChange,other}){return <article className="cmp-player"><label>Player {side}<select value={p.name} onChange={e=>onChange(e.target.value)}>{options.map(x=><option key={x.name} disabled={x.name===other.name}>{x.name}</option>)}</select></label><PlayerImage key={p.name} p={p}/><div className="cmp-identity"><h2>{p.name}</h2><p>{p.country} · {p.role}</p><span className="cmp-achievement"><Trophy size={17}/>{p.highlight}</span><small>{p.year}</small><div className="cmp-sources">{p.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.name}<ArrowUpRight size={12}/></a>)}</div></div></article>}
 
