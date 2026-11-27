@@ -4,6 +4,7 @@ import {ArrowLeftRight,ArrowUpRight,UserRound,BarChart3,Trophy} from 'lucide-rea
 import {players,groups} from './compare-data.js';
 import {publicAsset} from './assets.js';
 import './compare-players.css';
+import { ChessHeadToHead } from './chess-head-to-head.jsx';
 
 const sports=Object.keys(players), defaults={Football:[0,1],Cricket:[0,1],Chess:[0,1]};
 const cache=new Map();
@@ -39,7 +40,7 @@ export function ComparePlayers(){
  const [sport,setSport]=useState('Football'),[pair,setPair]=useState(defaults.Football),[onlyCommon,setOnlyCommon]=useState(false),[section,setSection]=useState('All');const reduced=useReducedMotion(),list=players[sport],a=list[pair[0]],b=list[pair[1]];
  const selectSport=s=>{setSport(s);setPair(defaults[s]);setOnlyCommon(false);setSection('All')};
  const pick=(side,name)=>setPair(old=>old.map((x,i)=>i===side?list.findIndex(p=>p.name===name):x));
- const presets={Football:[[0,1],[9,10],[3,5],[7,8]],Cricket:[[0,1],[2,3],[7,8],[11,12]],Chess:[[0,1],[0,2],[6,4],[7,6]]}[sport];
+ const presets={Football:[[0,1],[9,10],[3,5],[7,8]],Cricket:[[0,1],[2,3],[7,8],[11,12]],Chess:[[0,1],[0,2],[6,9],[6,4],[7,6],[4,14],[0,11]]}[sport];
  const keeper=sport==='Football'&&[a,b].some(p=>p.role==='Goalkeeper'),crossRole=keeper&&a.role!==b.role||sport==='Cricket'&&a.role!==b.role&&[a,b].some(p=>p.role==='Bowler');
  const relevant=groups[sport].filter(g=>!g.keeper||keeper);
  const common=relevant.flatMap(g=>g.rows).filter(([k])=>Number.isFinite(a.stats[k])&&Number.isFinite(b.stats[k])).length;
@@ -51,6 +52,7 @@ export function ComparePlayers(){
  <div className="cmp-tabs" role="group" aria-label="Sport">{sports.map(s=><button key={s} className={sport===s?'active':''} aria-pressed={sport===s} onClick={()=>selectSport(s)}>{s} <span>{players[s].length}</span></button>)}</div>
  <div className="cmp-presets"><strong>Popular matchups</strong>{presets.map(([x,y])=><button key={x+'-'+y} onClick={()=>{setPair([x,y]);setSection('All')}}>{list[x].name} vs {list[y].name}</button>)}</div>
  <div className="cmp-duel"><PlayerCard p={a} side="1" options={list} other={b} onChange={n=>{pick(0,n);setSection('All')}}/><div className="cmp-vs"><span>VS</span><button aria-label="Swap players" title="Swap players" onClick={()=>setPair(([x,y])=>[y,x])}><ArrowLeftRight size={21}/></button></div><PlayerCard p={b} side="2" options={list} other={a} onChange={n=>{pick(1,n);setSection('All')}}/></div>
+ {sport==='Chess'&&<ChessHeadToHead key={a.name+"|"+b.name} a={a} b={b}/>}
  <section className="cmp-overview"><div className="cmp-section-title"><h2>At a glance</h2><span>{common} shared statistics</span></div><div className="cmp-kpis">{featured.map(k=><article key={k}><small>{labels[k]}</small><div><strong>{format(a.stats[k],k)}</strong><span>vs</span><strong>{format(b.stats[k],k)}</strong></div><footer><span>{a.name}</span><span>{b.name}</span></footer></article>)}</div></section>
  <section className="cmp-analysis"><div className="cmp-section-title"><h2>Career breakdown</h2><label><input type="checkbox" checked={onlyCommon} onChange={e=>setOnlyCommon(e.target.checked)}/> Shared stats only</label></div>
  <div className="cmp-section-nav" role="group" aria-label="Stat category">{['All',...relevant.map(g=>g.title)].map(s=><button key={s} className={section===s?'active':''} aria-pressed={section===s} onClick={()=>setSection(s)}>{s}</button>)}</div>
