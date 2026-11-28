@@ -108,3 +108,13 @@ body{margin:0}img{max-width:100%}
 }
 @media(min-width:1221px){.mobile-nav{display:none!important}.top .mobile-menu{display:none}.toplinks button{font-size:clamp(11px,0.95vw,13px);padding:9px clamp(5px,.5vw,10px)}}
 @media(max-width:480px){.page-wrap{padding-inline:12px}.top{padding-inline:14px}}
+
+/* Shared gold icon treatment — text and action surfaces keep their existing palette. */
+:root{--app-icon:var(--app-gold,#e9c46a);--app-icon-on-accent:#624000}
+#root svg.lucide,#root .cp2-sport-icon svg,#root .cp2-sport-label svg,#root .cp2-list-icon svg,#root .cp2-sport-illustration svg,#root .hof-tabs svg{color:var(--app-icon)}
+#root .brand-mark,#root .cp2-mode-icon,#root .cp2-list-icon,#root .cp2-sport-icon,#root .sport-icon,#root .schedule-icon,#root .stat-icon,#root .activity-icon,#root .empty-icon,#root .placeholder-icon,#root .hof-heading-icon{color:var(--app-icon)}
+#root .brand-mark{background:var(--app-accent-soft);border:1px solid var(--app-line)}
+/* Darker gold on filled lavender controls for adequate visibility. */
+#root :is(.btn.primary,.cp2-primary,.cp2-gold-button) svg.lucide{color:var(--app-icon-on-accent)}
+#root :is(.event-icon.wicket,.event-icon.red,.cp2-error,.wrong,.btn.danger) svg.lucide{color:#ffaaa5}
+#root .hof-options .correct svg.lucide{color:#87cfad}
