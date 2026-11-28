@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() { return request.auth != null; }
+    function participant(g) { return signed() && (g.whiteUid == request.auth.uid || g.blackUid == request.auth.uid); }
+    function fields(g) {
+      return g.keys().hasOnly(['id','mode','whiteUid','blackUid','white','black','moves','result','reason','created','updated'])
+        && g.keys().hasAll(['id','mode','whiteUid','blackUid','white','black','moves','result','reason','created','updated'])
+        && g.whiteUid is string && (g.blackUid == null || g.blackUid is string)
+        && g.white is string && g.white.size() > 0 && g.white.size() <= 60
+        && g.black is string && g.black.size() > 0 && g.black.size() <= 60
+        && g.mode in ['online','local'] && g.moves is list && g.moves.size() <= 3000
+        && g.result in ['*','1-0','0-1','1/2-1/2']
+        && g.reason is string && g.reason.size() <= 80
+        && g.created is string && g.created.size() <= 30 && g.updated is string && g.updated.size() <= 30;
+    }
+    function waiting(g) { return g.mode == 'online' && g.blackUid == null && g.result == '*'; }
+    function moveShape(m) {
+      return m is map && m.keys().hasAll(['from','to']) && m.keys().hasOnly(['from','to','promotion'])
+        && m.from is string && m.from.matches('^[a-h][1-8]$')
+        && m.to is string && m.to.matches('^[a-h][1-8]$')
+        && (!('promotion' in m) || m.promotion in ['q','r','b','n']);
+    }
+    function turnOwner(g) {
+      return g.mode == 'local' && g.whiteUid == request.auth.uid
+        || g.mode == 'online' && g.blackUid != null
+           && (g.moves.size() % 2 == 0 ? g.whiteUid == request.auth.uid : g.blackUid == request.auth.uid);
+    }
+    function appendMove(old, next) {
+      return old.result == '*' && turnOwner(old)
+        && next.diff(old).affectedKeys().hasOnly(['moves','result','reason','updated'])
+        && next.moves.size() == old.moves.size() + 1
+        && moveShape(next.moves[old.moves.size()])
+        && next.moves == old.moves.concat([next.moves[old.moves.size()]])
+        && (next.result == '*' && next.reason == ''
+          || next.result == '1/2-1/2' && next.reason == 'Draw by rules'
+          || next.reason == 'Checkmate' && (old.moves.size() % 2 == 0 ? next.result == '1-0' : next.result == '0-1'));
+    }
+    function resign(old,next) {
+      return old.result == '*' && participant(old)
+        && next.diff(old).affectedKeys().hasOnly(['result','reason','updated'])
+        && (old.mode == 'local' && (next.result == '0-1' && next.reason == 'White resigned' || next.result == '1-0' && next.reason == 'Black resigned')
+          || old.mode == 'online' && old.blackUid != null && (
+            request.auth.uid == old.whiteUid && next.result == '0-1' && next.reason == 'White resigned'
+            || request.auth.uid == old.blackUid && next.result == '1-0' && next.reason == 'Black resigned'));
+    }
+    match /chessGames/{id} {
+      allow get: if signed() && (participant(resource.data) || waiting(resource.data));
+      allow list: if participant(resource.data);
+      allow create: if signed() && id.matches('^[a-f0-9]{32}$') && fields(request.resource.data)
+        && request.resource.data.id == id && request.resource.data.whiteUid == request.auth.uid
+        && request.resource.data.blackUid == null && request.resource.data.moves.size() == 0
+        && request.resource.data.result == '*' && request.resource.data.reason == '';
+      allow update: if signed() && fields(request.resource.data) && (
+        waiting(resource.data) && request.auth.uid != resource.data.whiteUid
+          && request.resource.data.blackUid == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['blackUid','black','updated'])
+        || participant(resource.data) && (appendMove(resource.data,request.resource.data) || resign(resource.data,request.resource.data))
+      );
+      allow delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

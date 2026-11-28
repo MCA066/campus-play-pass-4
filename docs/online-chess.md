@@ -1,7 +1,8 @@
-# CampusPlay online chess
-- Chess rules: chess.js 1.4.0 (BSD-2-Clause), loaded from jsDelivr.
-- Network: PeerJS 1.5.5 (MIT), loaded from jsDelivr; default public PeerServer for signaling.
-- Rooms are private by unguessable invite, not authenticated. Host validates moves, sends authoritative move history; this is not an anti-cheat system. Both peers must be online. Network/firewall restrictions may prevent WebRTC.
-- Each accepted game state is saved independently on both browsers that receive it. LocalStorage is not a database and is not synced. PGN exports are available. Clearing storage loses history; the host and guest may differ if disconnected before a final update. 
-- No forced time control or ratings. Chess.js draw detection is automatic in this casual mode.
-- Future production work: authenticated accounts, server-authoritative move validation and durable per-account game records, TURN relay, time controls and reconnect handling.
+# Firebase chess setup
+
+1. Enable Authentication Email/Password in Firebase Console.
+2. Create Cloud Firestore Standard in production mode. Choose a region near users (Mumbai if available).
+3. Copy the repository root firestore.rules into Firestore > Rules, then Publish. No open test rules.
+4. Open the hosted /chess route and create two separate email/password accounts. Test create, invite, join, legal moves, resignation, sign-out and history after sign-in on a second device.
+
+New games (both online and same-device) require sign-in and use Firestore transactions. Both participants query their own history. The older browser-local archive remains replayable/exportable but is not automatically uploaded. Invitation links contain a random ID; signed-in users with a waiting-room ID may join. Finished games are not deletable by the client. Rules protect participant identity, enforce alternating append-only move history, and restrict results. Chess rules are client validated; this is not server-authoritative or suitable for ranked play. No other site module is migrated yet. Firebase client SDK is loaded from Google's CDN, so npm lockfile stays unchanged. Firestore rules must be deployed separately; GitHub Pages deployment does not deploy them.
