@@ -1,0 +1,89 @@
+
+/* CampusPlay Arena — unified cinematic design layer. Existing layouts and game controls stay intact. */
+:root{--app-bg:#0d0b16;--app-card:#1a1627;--app-nav:#110e1e;--app-line:#3a304d;--app-accent:#c4aaff;--app-accent-hover:#e0ceff;--app-accent-soft:#33264c;--app-gold:#f3cf82;--app-text:#f8f5ff;--app-muted:#c7bdd7;--arena-card:linear-gradient(145deg,#262036 0%,#1a1627 45%,#151220 100%);--arena-shadow:0 15px 45px #05030b55;--arena-ring:0 0 0 1px #c4aaff12,0 12px 36px #08041177;--app-icon:var(--app-gold);--app-icon-on-accent:#573600}
+body,#root{background:radial-gradient(ellipse at 86% 0%,#39225355,transparent 42rem),radial-gradient(ellipse at 4% 35%,#30225335,transparent 40rem),var(--app-bg);color:var(--app-text);min-height:100vh}
+body{color-scheme:dark;font-variant-numeric:lining-nums}
+#root p,#root small{color:var(--app-muted)}
+#root .top{background:#110e1ee8;backdrop-filter:blur(18px) saturate(140%);border-bottom:1px solid #70538a55;box-shadow:0 8px 34px #05030b55;padding-inline:clamp(16px,2.6vw,44px);height:76px}
+#root .brand-mark{background:linear-gradient(145deg,#49344b,#20182d);border:1px solid #a7865666;box-shadow:0 0 22px #e3b75e17;border-radius:12px;width:36px;height:36px}
+#root .brand-play{color:var(--app-accent)}
+#root .toplinks{gap:3px;align-self:stretch;align-items:center}
+#root .toplinks button{display:flex;align-items:center;gap:4px;flex-direction:column;font-size:11px;line-height:1.05;padding:9px 7px;border:1px solid transparent;border-radius:10px;color:var(--app-muted)}
+#root .toplinks button svg{transition:transform .25s,filter .25s}
+#root .toplinks button:hover svg,#root .toplinks button.active svg{transform:translateY(-2px);filter:drop-shadow(0 0 5px #f3cf8266)}
+#root .toplinks button.active{background:linear-gradient(155deg,#45335d,#281e39);border-color:#a589e955;color:var(--app-text);box-shadow:0 0 20px #9b64ef15}
+#root .top-actions{gap:9px}#root .avatar{border:1px solid #c1a5f966;background:#302344;color:var(--app-text)}
+#root .mobile-nav{top:76px;background:#130f20f5;backdrop-filter:blur(16px);max-height:calc(100dvh - 76px);overflow-y:auto}
+#root .mobile-nav button span{display:flex;align-items:center;gap:13px}
+#root .mobile-nav button{background:transparent}#root .mobile-nav button.active{background:#33264c}
+#root :is(.cp2,.page-wrap,.cmp-page,.hof-page){max-width:1360px}
+#root .cp2-dashboard{padding-top:24px}
+.arena-hero{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);min-height:470px;border:1px solid #9776c75e;overflow:hidden;border-radius:28px;background:radial-gradient(ellipse at 80% 35%,#49336a99,transparent 62%),linear-gradient(120deg,#241b38,#151222 52%,#161128);box-shadow:0 22px 70px #05030b88,inset 0 1px #e2cfff17}
+.arena-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,transparent 58%,#c4aaff10),repeating-linear-gradient(120deg,transparent 0 42px,#a58ad407 43px 44px);pointer-events:none}
+.arena-hero-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(28px,5vw,68px);min-width:0}
+.arena-kicker{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:800;letter-spacing:.19em;color:var(--app-gold)}
+.arena-kicker>span,.arena-live-dot{display:inline-block;width:7px;height:7px;background:var(--app-gold);border-radius:50%;box-shadow:0 0 12px #f3cf82b0;flex:none}
+.arena-index{font-size:11px;letter-spacing:.14em;color:var(--app-muted);margin-top:23px}
+#root .arena-hero h1{font-size:clamp(42px,5.6vw,86px);line-height:.99;letter-spacing:-.065em;font-weight:800;margin:12px 0 18px;color:var(--app-text);text-wrap:balance}
+#root .arena-hero-copy p{font-size:clamp(15px,1.4vw,19px);line-height:1.65;max-width:410px;margin:0 0 24px;color:#ded4ed}
+.arena-hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.arena-ghost{display:inline-flex;gap:7px;align-items:center;border:1px solid #a68bd955;padding:11px 14px;border-radius:11px;background:#20182ca0;color:var(--app-text);font-size:13px;font-weight:650;min-height:44px}
+.arena-ghost:hover{border-color:var(--arena-highlight)}
+.arena-selector{display:flex;gap:5px;margin-top:30px;max-width:100%;flex-wrap:wrap}
+.arena-selector button{display:flex;gap:7px;align-items:center;background:transparent;border:1px solid #61517465;border-radius:7px;color:var(--app-muted);font-size:12px;padding:8px 11px}
+.arena-selector button span{color:#ae9bc9;font-size:10px}
+.arena-selector button.active{background:#483459;border-color:var(--arena-highlight);color:var(--app-text)}
+.arena-selector button.active span{color:var(--app-gold)}
+.arena-hero-meta{display:flex;gap:9px;flex-wrap:wrap;font-size:10px;color:#c5b3dc;letter-spacing:.09em;margin-top:19px}
+.arena-hero-meta span{color:var(--app-gold)}
+.arena-visual{position:relative;min-width:0;display:grid;place-items:center;overflow:hidden;isolation:isolate}
+.arena-stage{position:absolute;inset:0;overflow:hidden}.arena-webgl{width:100%;height:100%;position:absolute;inset:0}
+.arena-webgl canvas{display:block;width:100%;height:100%;touch-action:pan-y}
+.arena-fallback-art{position:absolute;width:100%;height:100%;inset:0;object-fit:contain}
+.arena-stage-caption{position:absolute;left:24px;bottom:20px;color:#e2d5f5;font-size:10px;font-weight:800;letter-spacing:.1em;display:flex;align-items:center;gap:8px;pointer-events:none}
+.arena-scene-controls{position:absolute;right:20px;bottom:17px;display:flex;gap:5px;z-index:2}
+.arena-scene-controls button{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;border:1px solid #ad92d14f;background:#171021dd;color:var(--app-gold)}
+.arena-scene-controls button:hover{border-color:var(--app-gold)}
+.arena-visual-index{position:absolute;top:10px;right:20px;color:#f6e4ff12;font-size:100px;font-weight:800;line-height:1;pointer-events:none}
+#root .arena-section-head{margin-top:32px}
+#root .arena-section-head h2{font-size:clamp(22px,2.7vw,32px);letter-spacing:-.035em;margin-top:3px}
+/* Shared surface treatment: cards, panels, sheets, chess, news and tournament controls. */
+#root :is(.cp2-card,.cp2-mode,.cp2-news-card,.cp2-stats>div,.match-card,.team-card,.recruit-card,.activity-card,.dash-panel,.dash-stats>div,.dash-side,.dash-profile,.tournament-card,.tour-stats>div,.live-card,.scoreboard,.modal,.detail-drawer,.team-detail-modal,.confirm-card,.featured-story,.news-card,.article-page,.directory-player-card,.national-team-card,.player-profile-page,.featured-players-block,.home-slim-panel,.home-news-item,.home-tournament-card,.roster-box,.register-panel,.aggregate-box,.announce-compose,.news-empty,.empty,.cmp-player,.cmp-stats,.cmp-stat-group,.cmp-kpis article,.h2h-panel,.hof-record,.oc-lobby,.oc-account,.oc-side,.oc-board-panel,.oc-archive){background:var(--arena-card);border-color:var(--app-line);box-shadow:var(--arena-shadow);color:var(--app-text)}
+#root :is(.cp2-mode,.cp2-mode.cp2-compete,.tournament-card,.team-card,.match-card,.news-card,.directory-player-card,.hof-record,.cmp-player,.live-card){border-radius:18px;transition:border-color .25s,box-shadow .25s,transform .25s}
+#root :is(.cp2-mode,.tournament-card,.team-card,.match-card,.news-card,.directory-player-card,.hof-record,.cmp-player,.live-card):hover{border-color:#b89be88a;box-shadow:0 18px 45px #05030b85,0 0 26px #a27be71c}
+#root .cp2-mode{background:radial-gradient(ellipse at 95% 0%,#49356877,transparent 70%),var(--arena-card);min-height:220px}
+#root .cp2-mode.cp2-compete{background:radial-gradient(ellipse at 95% 0%,#7c562e4d,transparent 70%),var(--arena-card)}
+#root :is(.cp2-mode-icon,.cp2-sport-icon,.cp2-list-icon,.hof-heading-icon,.stat-icon,.activity-icon,.placeholder-icon){background:linear-gradient(145deg,#49334f,#211a31);border-color:#a788584f;box-shadow:inset 0 1px #ffeac51a,0 4px 15px #05030b40}
+#root :is(.cp2-mode-icon,.cp2-sport-icon,.hof-heading-icon) svg{filter:drop-shadow(0 0 6px #f3cf8244)}
+#root .cp2-sports .cp2-sport{border-radius:18px;min-height:225px;border:1px solid #6e577f80;box-shadow:var(--arena-shadow)}
+#root .cp2-sports .cp2-sport::after{background:linear-gradient(0deg,#100b1cf5 0%,#21132c55 50%,#15102211)}
+#root .cp2-sports .cp2-sport:hover{border-color:var(--app-gold)}
+#root .cp2-stats strong{font-size:clamp(26px,3vw,38px);color:var(--app-gold);font-weight:800}
+#root .cp2-list-row:hover{background:#3a294e70}
+#root .cp2-leaderboard th,#root .cmp-data-table thead th,#root .cmp-column-head{background:#231a36}
+#root :is(.btn.primary,.cp2-primary,.cp2-gold-button){background:linear-gradient(115deg,#ddcaff 0%,#b89af1 55%,#ab88ed 100%);border:1px solid #e5d4ff66;color:#1b112d;box-shadow:0 5px 18px #b68bed25,inset 0 1px #fff4;transition:filter .2s,box-shadow .2s,transform .2s;border-radius:11px;font-weight:750}
+#root :is(.btn.primary,.cp2-primary,.cp2-gold-button):hover:not(:disabled){filter:brightness(1.1);box-shadow:0 6px 24px #b68bed45;transform:translateY(-1px)}
+#root :is(.btn.secondary,.btn.outline,.btn.white,.cp2-secondary,.filter-btn,.cmp-presets button,.cmp-tabs button,.cmp-section-nav button,.cmp-view-switch button,.hof-tabs button){background:#21192f;color:var(--app-text);border-color:#514264;border-radius:10px}
+#root :is(.cmp-tabs button.active,.cmp-section-nav button.active,.cmp-view-switch button.active,.hof-tabs button.active,.cp2-tabs button.selected,.sport-tabs button.selected){background:#433259;color:#f0e6ff;border-color:#b59af1}
+#root :is(input:not([type=checkbox]):not([type=radio]),select,textarea){background:#100d1b;color:var(--app-text);border-color:#534363}
+#root :is(.top .profile-select,.mobile-profile select){background:#20172e}
+#root :is(.page-intro h1,.cmp-heading h1,.hof-heading h1,.oc-heading h1,.cp2-page-title h1){font-weight:800;letter-spacing:-.045em}
+#root .cmp-photo.cp-portrait-frame,#root .hof-portrait,#root .player-card-photo,#root .player-profile-photo{background:radial-gradient(ellipse at 50% 60%,#4b3763 0%,#241b36 52%,#15101f 100%);border-color:#4a385f}
+#root .cmp-photo.cp-portrait-frame img,#root .hof-portrait img{filter:drop-shadow(0 8px 14px #0006)}
+#root .cmp-lead,#root .h2h-gold,#root .hof-value{color:var(--app-gold);text-shadow:0 0 18px #f3cf821b}
+#root .cmp-meter i{background:linear-gradient(90deg,#8f69d6,#c8b1ff)}
+#root .cmp-meter i.cmp-leading{background:linear-gradient(90deg,#ae7838,#f3cf82)}
+#root .oc-board{border:2px solid #a78abf;box-shadow:0 12px 34px #0007,0 0 25px #9864e229}
+#root .oc-square.light{background:#e2d9ef}#root .oc-square.dark{background:#7c6797}
+#root .oc-square.selected{background:#b6a0c8;box-shadow:inset 0 0 0 4px #f3cf82}
+#root .oc-player{font-size:15px}
+#root .oc-status{color:var(--app-gold)}
+#root .oc-notice{background:#251d38;color:var(--app-text);border-color:#68527f}
+#root footer{background:#110e1e;border-color:#392c4b}
+#root :is(button,a,input,select,textarea):focus-visible{outline:2px solid #f3cf82;outline-offset:3px}
+#root button:disabled{cursor:not-allowed}
+@media(max-width:1220px){#root .top{height:66px}#root .mobile-nav{top:66px;max-height:calc(100dvh - 66px)}#root .toplinks{display:none}}
+@media(min-width:1221px) and (max-width:1450px){#root .top .profile-select{max-width:100px}#root .toplinks button{font-size:10px;padding-inline:5px}#root .top{padding-inline:17px;gap:8px}}
+@media(max-width:820px){.arena-hero{grid-template-columns:1fr;min-height:auto;border-radius:20px}.arena-hero-copy{padding:28px 24px 10px}.arena-visual{min-height:320px;aspect-ratio:1.3}.arena-selector{margin-top:21px}.arena-hero-meta{margin-top:14px}.arena-visual-index{font-size:70px}.arena-stage-caption{left:15px;bottom:19px}.arena-scene-controls{right:12px}.arena-index{margin-top:15px}#root .cp2-dashboard{padding-top:14px}#root .cp2-sports .cp2-sport{min-height:165px}}
+@media(max-width:420px){.arena-hero-copy{padding:23px 17px 8px}.arena-visual{min-height:270px}.arena-hero-actions{gap:7px}.arena-ghost{font-size:12px}.arena-selector button{font-size:11px;padding:7px 8px}.arena-stage-caption{font-size:8px}#root .cp2-sports .cp2-sport{min-height:130px}}
+@media(prefers-reduced-motion:reduce){#root *,#root *::before,#root *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
